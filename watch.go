@@ -76,6 +76,10 @@ func (w *Watcher) Watch() {
 				if isTestFile(event.Name) {
 					continue
 				}
+				// skip flymake files
+				if isFlymakeFile(event.Name) {
+					continue
+				}
 				if !isWatchedFileType(event.Name) {
 					continue
 				}
@@ -102,6 +106,10 @@ func (w *Watcher) Watch() {
 
 func isTestFile(fileName string) bool {
 	return strings.HasSuffix(filepath.Base(fileName), "_test.go")
+}
+
+func isFlymakeFile(fileName string) bool {
+	return strings.HasSuffix(filepath.Base(fileName), "_flymake.go")
 }
 
 func isWatchedFileType(fileName string) bool {
@@ -149,7 +157,7 @@ func (w *Watcher) watchFolders() {
 		}
 
 		// skip hidden folders
-		if len(path) > 1 && strings.HasPrefix(filepath.Base(path), ".") {
+		if len(path) > 1 && strings.HasPrefix(filepath.Base(path), ".")  {
 			return filepath.SkipDir
 		}
 
